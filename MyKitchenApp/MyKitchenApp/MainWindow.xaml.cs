@@ -15,7 +15,7 @@ namespace MyKitchenApp
         public static string log;
         public static string pass;
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        /*private void Register_Click(object sender, RoutedEventArgs e)
         {
             if (log.Equals("") || pass.Equals(""))
             {
@@ -52,7 +52,7 @@ namespace MyKitchenApp
 
             LoginBox.Clear();
             PasswordBox.Clear();
-        }
+        }*/
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
@@ -86,5 +86,13 @@ namespace MyKitchenApp
                 cn.Close();
             }
         }
-    }
+
+        private void GoRegister_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterWindow registerWindow = new RegisterWindow();
+            registerWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            registerWindow.Show();
+            Close();
+        }
+     }
 }

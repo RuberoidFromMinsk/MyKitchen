@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="281.579" Width="481.579">
+        Title="MainWindow" Height="281.579" Width="481.579" Background="AntiqueWhite">
     <Grid>
-        
-        <TextBox x:Name="LoginBox" HorizontalAlignment="Left" Height="23" Margin="182,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Login" HorizontalAlignment="Left" Margin="182,36,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="182,122,0,0" VerticalAlignment="Top" Width="120" Height="21"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="182,96,0,0" VerticalAlignment="Top"/>
-        <Button Content="Sign in" HorizontalAlignment="Left" Margin="204,162,0,0" VerticalAlignment="Top" Width="75" Click="Login_Click"/>
-        <Button Content="Create account" HorizontalAlignment="Left" Margin="182,186,0,0" VerticalAlignment="Top" Width="120" Click="Register_Click"/>
+
+        <TextBox x:Name="LoginBox" HorizontalAlignment="Left" Height="23" Margin="23,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"/>
+        <Label Content="Login" HorizontalAlignment="Left" Margin="63,10,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="23,95,0,0" VerticalAlignment="Top" Width="131" Height="23"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="47,69,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
+        <Button Content="Sign in" HorizontalAlignment="Left" Margin="23,130,0,0" VerticalAlignment="Top" Width="131" Click="Login_Click" FontSize="18" FontFamily="Segoe Print" Foreground="DarkSlateGray" Background="GreenYellow" Height="34"/>
+        <Button Content="Create account" HorizontalAlignment="Left" Margin="23,169,0,0" VerticalAlignment="Top" Width="131" Click="GoRegister_Click" Height="32" FontSize="16" FontFamily="Segoe Print" Foreground="White" Background="DeepSkyBlue"/>
 
     </Grid>
 </Window>

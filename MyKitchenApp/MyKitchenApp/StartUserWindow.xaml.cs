@@ -25,6 +25,7 @@ namespace MyKitchenApp
         }
         public static int user_id = Get_UserID();
 
+        #region Windows
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
             AddProductWindow addProductWindow = new AddProductWindow();
@@ -40,5 +41,22 @@ namespace MyKitchenApp
             addRecipeWindow.Show();
             Close();
         }
+
+        private void ShoppingList_Click(object sender, RoutedEventArgs e)
+        {
+            ShoppingList shoppingList = new ShoppingList();
+            shoppingList.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            shoppingList.Show();
+            Close();
+        }
+
+        private void GoCalc_Click(object sender, RoutedEventArgs e)
+        {
+            CalcWindow calcWindow = new CalcWindow();
+            calcWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            calcWindow.Show();
+            Close();
+        }
+        #endregion
     }
 }
