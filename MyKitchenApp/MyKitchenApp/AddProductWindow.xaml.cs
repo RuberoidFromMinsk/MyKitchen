@@ -19,13 +19,19 @@ namespace MyKitchenApp
             if (int.TryParse(AmountBox.Text, out amount))
             { }
             else
-                MessageBox.Show("You have entered a wrong data");
+            {
+                MessageBox.Show("You entered wrong data");
+                return;
+            }
 
             int cal;
             if (int.TryParse(CalorificBox.Text, out cal))
             { }
             else
-                MessageBox.Show("You have entered a wrong data");
+            {
+                MessageBox.Show("You entered wrong data");
+                return;
+            }
 
             string ConnectionString = @"Data Source=DESKTOP-R0R983R;Initial Catalog=MyKitchen;Integrated Security=True";
             string sqlExpression = $"INSERT INTO PRODUCTS(KITCHEN_ID, NAME, AMOUNT, CALORIFIC, DATE, EXP_DATE) VALUES({StartUserWindow.user_id},'{ProductNameBox.Text}', {amount}, {cal}, '{PurchaseDateBox.Text}', '{ExpDateBox.Text}');";
@@ -37,6 +43,10 @@ namespace MyKitchenApp
                 MessageBox.Show("Your product added");
                 connection.Close();
             }
+
+            ProductNameBox.Clear();
+            CalorificBox.Clear();
+            AmountBox.Clear();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace MyKitchenApp
 {
-    /// <summary>
-    /// Логика взаимодействия для RegisterWindow.xaml
-    /// </summary>
     public partial class RegisterWindow : Window
     {
         string ConnectionString = @"Data Source=DESKTOP-R0R983R;Initial Catalog=MyKitchen;Integrated Security=True";
@@ -29,7 +26,7 @@ namespace MyKitchenApp
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (LoginBox.Equals("") || PasswordBox.Equals("") || NameBox.Equals("") || EmailBox.Equals(""))
+            if (LoginBox.Text.Length == 0 || PasswordBox.Password.Length == 0 || NameBox.Text.Length == 0 || EmailBox.Text.Length == 0)
             {
                 MessageBox.Show("Boxes mustn't be empty");
                 return;
@@ -43,7 +40,8 @@ namespace MyKitchenApp
                 command.CommandText = $"SELECT COUNT(*) FROM USERS WHERE LOGIN = '{LoginBox.Text}';";
                 if (!command.ExecuteScalar().Equals(0))
                 {
-                    MessageBox.Show("A user with the same login exist");
+                    MessageBox.Show("User with the same login exist. Change your login.");
+                    return;
                 }
                 else
                 {

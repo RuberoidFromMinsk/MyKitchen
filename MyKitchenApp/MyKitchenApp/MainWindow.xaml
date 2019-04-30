@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="281.579" Width="481.579" Background="AntiqueWhite">
-    <Grid>
+        Title="MainWindow" Height="276.379" Width="369.579" Background="AntiqueWhite">
+    <Grid Margin="0,0,3.2,-2.4">
 
-        <TextBox x:Name="LoginBox" HorizontalAlignment="Left" Height="23" Margin="23,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"/>
-        <Label Content="Login" HorizontalAlignment="Left" Margin="63,10,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="23,95,0,0" VerticalAlignment="Top" Width="131" Height="23"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="47,69,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
-        <Button Content="Sign in" HorizontalAlignment="Left" Margin="23,130,0,0" VerticalAlignment="Top" Width="131" Click="Login_Click" FontSize="18" FontFamily="Segoe Print" Foreground="DarkSlateGray" Background="GreenYellow" Height="34"/>
-        <Button Content="Create account" HorizontalAlignment="Left" Margin="23,169,0,0" VerticalAlignment="Top" Width="131" Click="GoRegister_Click" Height="32" FontSize="16" FontFamily="Segoe Print" Foreground="White" Background="DeepSkyBlue"/>
+        <TextBox x:Name="LoginBox" HorizontalAlignment="Left" Height="37" Margin="23,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="164" FontSize="18" FontFamily="Century Gothic"  FontStyle="Italic"/>
+        <Label Content="Login" HorizontalAlignment="Left" Margin="82,10,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="23,95,0,0" VerticalAlignment="Top" Width="164" Height="30" FontSize="18"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="67,69,0,0" VerticalAlignment="Top" FontSize="16" FontStyle="Italic"/>
+        <Button Content="Sign in" HorizontalAlignment="Left" Margin="23,143,0,0" VerticalAlignment="Top" Width="164" Click="Login_Click" FontSize="18" FontFamily="Segoe Print" Foreground="DarkSlateGray" Background="GreenYellow" Height="37"/>
+        <Button Content="Create account" HorizontalAlignment="Left" Margin="23,192,0,0" VerticalAlignment="Top" Width="164" Click="GoRegister_Click" Height="32" FontSize="16" FontFamily="Segoe Print" Foreground="White" Background="DeepSkyBlue"/>
+        <Image Source="C:\Users\Andrew\source\repos\MyKitchenApp\MyKitchenApp\Images\user.png" HorizontalAlignment="Left" Height="192" Margin="173,47,-48,-5.4" VerticalAlignment="Top" Width="235"/>
 
     </Grid>
 </Window>

@@ -67,8 +67,9 @@ namespace MyKitchenApp
             }
         }
 
-        string Get_UserName()
+        public static string Get_UserName()
         {
+            string ConnectionString = @"Data Source=DESKTOP-R0R983R;Initial Catalog=MyKitchen;Integrated Security=True";
             string name = null;
             using (SqlConnection cn = new SqlConnection(ConnectionString))
             {

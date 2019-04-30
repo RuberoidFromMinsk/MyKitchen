@@ -8,6 +8,7 @@ namespace MyKitchenApp
         public StartUserWindow()
         {
             InitializeComponent();
+            HelloBox.Content = $"Hi, {ShoppingList.Get_UserName()}";
         }
 
         public static int Get_UserID()
@@ -57,6 +58,16 @@ namespace MyKitchenApp
             calcWindow.Show();
             Close();
         }
+
+        private void GoMyRecipes_Click(object sender, RoutedEventArgs e)
+        {
+            MyRecipes myRecipes = new MyRecipes();
+            myRecipes.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            myRecipes.Show();
+            Close();
+        }
         #endregion
+
+
     }
 }
