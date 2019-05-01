@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="AddProductWindow" Height="453.214" Width="317.857" Background="AntiqueWhite">
+        Title="Add product" Height="453.214" Width="317.857" Background="AntiqueWhite">
     <Grid Margin="0,0,3,1.6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -15,14 +15,12 @@
         <TextBox x:Name="AmountBox" HorizontalAlignment="Left" Height="23" Margin="95,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="CalorificBox" HorizontalAlignment="Left" Height="23" Margin="95,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <DatePicker x:Name="PurchaseDateBox" HorizontalAlignment="Left" Margin="95,262,0,0" VerticalAlignment="Top" Height="26" Width="120"/>
-        <DatePicker x:Name="ExpDateBox" HorizontalAlignment="Left" Margin="95,320,0,0" VerticalAlignment="Top" Width="120" Height="24"/>
         <Label Content="Product name" HorizontalAlignment="Left" Margin="95,58,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
         <Label Content="Amount" HorizontalAlignment="Left" Margin="95,113,0,0" VerticalAlignment="Top" Height="26" Width="53"/>
         <Label Content="Calorific" HorizontalAlignment="Left" Margin="95,172,0,0" VerticalAlignment="Top" Height="26" Width="53"/>
         <Label Content="Purchase date" HorizontalAlignment="Left" Margin="95,231,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
-        <Label Content="Explanation date" HorizontalAlignment="Left" Margin="95,294,0,0" VerticalAlignment="Top" Height="26" Width="98"/>
         <Label Content="You can add your product!" HorizontalAlignment="Left" Margin="51,10,0,0" VerticalAlignment="Top" Height="43" Width="223" FontSize="18"/>
-        <Button Content="Add" Click="Add_Click" HorizontalAlignment="Left" Margin="95,365,0,0" VerticalAlignment="Top" Width="120" Height="41" FontSize="18" Foreground="DarkBlue" Background="ForestGreen"/>
+        <Button Content="Add" Click="Add_Click" HorizontalAlignment="Left" Margin="95,345,0,0" VerticalAlignment="Top" Width="120" Height="41" FontSize="18" Foreground="DarkBlue" Background="ForestGreen"/>
         <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="29" Height="18" Click="Back_Click"/>
 
     </Grid>

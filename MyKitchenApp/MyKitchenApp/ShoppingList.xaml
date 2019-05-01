@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="ShoppingList" Height="372.8" Width="314.8" Background="AntiqueWhite">
+        Title="Wishlist" Height="409.067" Width="314.8" Background="AntiqueWhite">
     <Grid Margin="0,0,3.4,1.6">
         <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="31" Height="21" Click="Back_Click"/>
-        <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="101,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Name" HorizontalAlignment="Left" Margin="141,36,0,0" VerticalAlignment="Top"/>
-        <Label Content="Description" HorizontalAlignment="Left" Margin="124,95,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="DescriptionBox" HorizontalAlignment="Left" Height="23" Margin="101,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Add to list" HorizontalAlignment="Left" Margin="81,164,0,0" VerticalAlignment="Top" Width="158" Height="37" RenderTransformOrigin="0.419,0.411" FontSize="18" FontFamily="Segoe Print" Foreground="DarkSlateGray" Background="GreenYellow" Click="AddToList_Click"/>
-        <Button Content="Send list an email" HorizontalAlignment="Left" Margin="81,244,0,0" VerticalAlignment="Top" Width="158" Height="37" FontSize="13" FontFamily="Segoe Print" Foreground="GreenYellow" Background="Gray" Click="SendMail_Click"/>
-        <Button Content="Remove" HorizontalAlignment="Left" Margin="81,206,0,0" VerticalAlignment="Top" Width="158" Height="33" FontFamily="Segoe Print" Foreground="White" Background="Red" FontSize="18" Click="Remove_Click"/>
-        <Button Content="Show my list" HorizontalAlignment="Left" Margin="81,286,0,0" VerticalAlignment="Top" Width="158" Height="31" FontSize="16" FontFamily="Segoe Print" Foreground="GreenYellow" Background="Gray" Click="ShowList_Click"/>
+        <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="101,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Name" HorizontalAlignment="Left" Margin="138,29,0,0" VerticalAlignment="Top"/>
+        <Label Content="Description" HorizontalAlignment="Left" Margin="127,142,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="DescriptionBox" HorizontalAlignment="Left" Height="23" Margin="101,167,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Add to list" HorizontalAlignment="Left" Margin="81,211,0,0" VerticalAlignment="Top" Width="158" Height="37" RenderTransformOrigin="0.419,0.411" FontSize="18" FontFamily="Segoe Print" Foreground="DarkSlateGray" Background="GreenYellow" Click="AddToList_Click"/>
+        <Button Content="Send list an email" HorizontalAlignment="Left" Margin="81,291,0,0" VerticalAlignment="Top" Width="158" Height="37" FontSize="13" FontFamily="Segoe Print" Foreground="GreenYellow" Background="Gray" Click="SendMail_Click"/>
+        <Button Content="Remove" HorizontalAlignment="Left" Margin="81,253,0,0" VerticalAlignment="Top" Width="158" Height="33" FontFamily="Segoe Print" Foreground="White" Background="Red" FontSize="18" Click="Remove_Click"/>
+        <Button Content="Show my list" HorizontalAlignment="Left" Margin="81,333,0,0" VerticalAlignment="Top" Width="158" Height="35" FontSize="16" FontFamily="Segoe Print" Foreground="GreenYellow" Background="Gray" Click="ShowList_Click"/>
+        <TextBox x:Name="AmountBox" HorizontalAlignment="Left" Height="23" Margin="101,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Amount" HorizontalAlignment="Left" Margin="132,88,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

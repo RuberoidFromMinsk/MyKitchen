@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="CalcWindow" Height="298.207" Width="518.75" Background="AntiqueWhite">
+        Title="Calculator" Height="298.207" Width="518.75" Background="AntiqueWhite">
     <Grid>
         <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Click="Back_Click" Height="22"/>
         <ComboBox x:Name="ProductItems" HorizontalAlignment="Left" Margin="72,32,0,0" VerticalAlignment="Top" Width="120"/>

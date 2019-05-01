@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="MyRecipes" Height="319.421" Width="348.849" Background="AntiqueWhite">
+        Title="My recipes" Height="319.421" Width="348.849" Background="AntiqueWhite">
     <Grid Margin="0,0,4.4,0.4">
         <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Height="16" Click="Back_Click"/>
         <ComboBox x:Name="RecipeItems" HorizontalAlignment="Left" Margin="113,10,0,0" VerticalAlignment="Top" Width="120"/>

@@ -107,19 +107,34 @@ namespace MyKitchenApp
         {
             DataTable prodTable = new DataTable();
             int amountForCheck = 0;
-
             int amount;
-            if (int.TryParse(AmountBox.Text, out amount))
-            { }
+
+            if (AmountBox.Text.Length == 0)
+            {
+                MessageBox.Show("Please, enter the amount.");
+                return;
+            }
             else
+            {
+                if (int.TryParse(AmountBox.Text, out amount))
+                { }
+                else
+                {
+                    MessageBox.Show("Incorrect data in amount box.");
+                    return;
+                }
+            }
+            
+
+            if(amount <= 0)
             {
                 MessageBox.Show("You entered wrong data");
                 return;
             }
 
-            if(amount <= 0)
+            if(ProductItems.Text.Length == 0 && AmountBox.Text.Length > 0)
             {
-                MessageBox.Show("You entered wrong data");
+                MessageBox.Show("Please, choose an ingredient.");
                 return;
             }
 
@@ -201,6 +216,7 @@ namespace MyKitchenApp
                 FillDataset();
                 ProductItems.Items.Clear();
                 FillCombobox();
+                AmountBox.Clear();
             }
         }
 
@@ -210,13 +226,17 @@ namespace MyKitchenApp
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             if(RecipeNameBox.Text.Length == 0 || 
-               PortionsBox.Text.Length == 0 || 
-               AmountBox.Text.Length == 0 || 
-               DescriptionBox.Text.Length == 0)
+               PortionsBox.Text.Length == 0)
             {
-                MessageBox.Show("Invalid data. Check it.");
+                MessageBox.Show("Fill recipe name and portions boxes and continue.");
                 return;
             }
+
+            string description;
+            if (DescriptionBox.Text.Length == 0)
+                description = "-";
+            else
+                description = DescriptionBox.Text;
 
             int portions;
             if (int.TryParse(PortionsBox.Text, out portions))
@@ -238,26 +258,37 @@ namespace MyKitchenApp
 
             using (SqlConnection cn = new SqlConnection(ConnectionString))
             {
-
-                //запоминаем имена selected products
-                DataTable _table = new DataTable();
-                SqlDataAdapter adapter_names = new SqlDataAdapter($"SELECT NAME FROM SELECTED_PRODUCTS", ConnectionString);
-                adapter_names.Fill(_table);
-                foreach (DataRow row in _table.Rows)
-                    names.Add(row.ItemArray.First().ToString());
-
-
                 cn.Open();
                 SqlCommand command = cn.CreateCommand();
+
                 #region проверка на имя рецепта
-                command.CommandText = $"SELECT COUNT(*) FROM RECIPES WHERE NAME = '{RecipeNameBox.Text}';";
+                command.CommandText = $"SELECT COUNT(NAME) FROM RECIPES WHERE NAME = '{RecipeNameBox.Text}';";
                 int count = (int)command.ExecuteScalar();
                 if (count > 0)
                 {
                     MessageBox.Show("Recipe with the same name exist. Change it.");
                     return;
                 }
+
+                command.CommandText = $"SELECT COUNT(*) FROM SELECTED_PRODUCTS;";
+                int check_product_count = (int)command.ExecuteScalar();
+                if(check_product_count == 0)
+                {
+                    MessageBox.Show("Add at least one ingredient");
+                    return;
+                }
                 #endregion
+
+                    //запоминаем имена selected products
+                    DataTable _table = new DataTable();
+                SqlDataAdapter adapter_names = new SqlDataAdapter($"SELECT NAME FROM SELECTED_PRODUCTS", ConnectionString);
+                adapter_names.Fill(_table);
+                foreach (DataRow row in _table.Rows)
+                    names.Add(row.ItemArray.First().ToString());
+
+
+                
+                
 
                 for (int i = 0; i < names.Count(); i++)
                 {
@@ -265,7 +296,7 @@ namespace MyKitchenApp
                     command.ExecuteNonQuery();
                 }
 
-                command.CommandText = $"INSERT INTO RECIPES(KITCHEN_ID, NAME, PORTIONS, DESCRIPTION) VALUES({StartUserWindow.user_id},'{RecipeNameBox.Text}', {portions}, '{DescriptionBox.Text}');";
+                command.CommandText = $"INSERT INTO RECIPES(KITCHEN_ID, NAME, PORTIONS, DESCRIPTION) VALUES({StartUserWindow.user_id},'{RecipeNameBox.Text}', {portions}, '{description}');";
                 command.ExecuteNonQuery();
 
                 command.CommandText = $"SELECT ID FROM RECIPES WHERE NAME = '{RecipeNameBox.Text}' AND KITCHEN_ID = {StartUserWindow.user_id};";

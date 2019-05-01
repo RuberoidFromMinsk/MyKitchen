@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyKitchenApp"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="378.861" Width="280.515" Background="AntiqueWhite">
+        Title="Registration" Height="378.861" Width="280.515" Background="AntiqueWhite">
     <Grid>
         <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="77,94,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="EmailBox" HorizontalAlignment="Left" Height="23" Margin="77,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>

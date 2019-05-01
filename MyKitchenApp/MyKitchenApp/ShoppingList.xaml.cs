@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System;
+using System.Collections.Generic;
 
 namespace MyKitchenApp
 {
@@ -101,11 +102,28 @@ namespace MyKitchenApp
 
         private void AddToList_Click(object sender, RoutedEventArgs e)
         {
+            int amount;
+            if (AmountBox.Text.Length == 0)
+            {
+                MessageBox.Show("Please, enter the amount.");
+                return;
+            }
+            else
+            {
+                if (int.TryParse(AmountBox.Text, out amount))
+                { }
+                else
+                {
+                    MessageBox.Show("Incorrect data in amount box.");
+                    return;
+                }
+            }
+
             using (SqlConnection cn = new SqlConnection(ConnectionString))
             {
                 cn.Open();
                 SqlCommand command = cn.CreateCommand();
-                command.CommandText = $"INSERT INTO SHOPPING_LIST(KITCHEN_ID, NAME, DESCRIPTION) VALUES({StartUserWindow.user_id}, '{NameBox.Text}', '{DescriptionBox.Text}');";
+                command.CommandText = $"INSERT INTO WISH_LIST(KITCHEN_ID, NAME, DESCRIPTION, AMOUNT) VALUES({StartUserWindow.user_id}, '{NameBox.Text}', '{DescriptionBox.Text}', {amount});";
                 command.ExecuteNonQuery();
                 cn.Close();
             }
@@ -118,14 +136,25 @@ namespace MyKitchenApp
             using (SqlConnection cn = new SqlConnection(ConnectionString))
             {
                 cn.Open();
+
                 SqlCommand command = cn.CreateCommand();
-                command.CommandText = $"SELECT NAME, DESCRIPTION FROM SHOPPING_LIST WHERE KITCHEN_ID = {StartUserWindow.user_id};";
+                command.CommandText = $"DELETE FROM SHOPPING_LIST;";
+                command.ExecuteNonQuery();
+
+                command.CommandText = $"INSERT INTO SHOPPING_LIST(NAME, AMOUNT, DESCRIPTION) SELECT A.NAME, A.AMOUNT - B.AMOUNT, A.DESCRIPTION FROM WISH_LIST A JOIN PRODUCTS B ON A.NAME = B.NAME WHERE B.KITCHEN_ID = {StartUserWindow.user_id} AND B.AMOUNT < A.AMOUNT;";
+                command.ExecuteNonQuery();
+
+                command.CommandText = $"INSERT INTO SHOPPING_LIST(NAME, AMOUNT, DESCRIPTION) SELECT NAME, AMOUNT, DESCRIPTION FROM WISH_LIST A WHERE A.NAME NOT IN(SELECT NAME FROM PRODUCTS WHERE KITCHEN_ID = {StartUserWindow.user_id});";
+                command.ExecuteNonQuery();
+
+                command.CommandText = $"SELECT NAME, AMOUNT, DESCRIPTION DESCRIPTION FROM SHOPPING_LIST;";
                 SqlDataReader reader = command.ExecuteReader();
+                myMessage.Append("Here your items you should buy to be happy:\n\n\n");
                 if(reader.HasRows)
                 {
                     while(reader.Read())
                     {
-                        myMessage.Append("● " + reader.GetValue(0) + "   " + reader.GetValue(1) + "\n");
+                        myMessage.Append("● " + reader.GetValue(0) + "   " + reader.GetValue(1) + "  " + reader.GetValue(2) + "\n");
                     }
                 }
                 cn.Close();
@@ -141,7 +170,7 @@ namespace MyKitchenApp
             {
                 cn.Open();
                 SqlCommand command = cn.CreateCommand();
-                command.CommandText = $"DELETE FROM SHOPPING_LIST WHERE NAME = '{NameBox.Text}' AND KITCHEN_ID = {StartUserWindow.user_id};";
+                command.CommandText = $"DELETE FROM WISH_LIST WHERE NAME = '{NameBox.Text}' AND KITCHEN_ID = {StartUserWindow.user_id};";
                 int number = command.ExecuteNonQuery();
                 MessageBox.Show("Strings deleted: " + number.ToString());
                 cn.Close();
@@ -156,7 +185,7 @@ namespace MyKitchenApp
             {
                 cn.Open();
                 SqlCommand command = cn.CreateCommand();
-                command.CommandText = $"SELECT NAME, DESCRIPTION FROM SHOPPING_LIST WHERE KITCHEN_ID = {StartUserWindow.user_id};";
+                command.CommandText = $"SELECT NAME, AMOUNT, DESCRIPTION FROM WISH_LIST WHERE KITCHEN_ID = {StartUserWindow.user_id};";
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
