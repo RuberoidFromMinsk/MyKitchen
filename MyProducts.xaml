@@ -1,0 +1,20 @@
+﻿<Window x:Class="MyKitchenApp.MyProducts"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyKitchenApp"
+        mc:Ignorable="d"
+        Title="MyProducts" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="AntiqueWhite">
+    <Grid>
+        <Button Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54" Height="42" Click="Back_Click" Grid.ColumnSpan="2" Background="AntiqueWhite">
+            <Button.ContentTemplate >
+                <DataTemplate >
+                    <Image   Source="Img\back.png" />
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
+        <DataGrid x:Name="products" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="308" Margin="75,75,0,0" VerticalAlignment="Top" Width="651"/>
+        <Label Content="Your products" HorizontalAlignment="Left" Margin="306,12,0,0" VerticalAlignment="Top" Height="54" Width="198" FontSize="26" FontWeight="DemiBold" FontFamily="Century Gothic"/>
+    </Grid>
+</Window>
