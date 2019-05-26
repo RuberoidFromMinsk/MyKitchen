@@ -1,0 +1,352 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Windows;
+
+namespace MyKitchenApp
+{
+    public partial class AddRecipeWindow : Window
+    {
+        List<int> products_id = new List<int>();
+        List<int> amounts = new List<int>();
+        List<string> names = new List<string>();
+
+        string ConnectionString = ConfigurationManager.ConnectionStrings["connect"].ConnectionString;
+
+        public AddRecipeWindow()
+        {
+            InitializeComponent();
+            Clear_SELECTED_PRODUCTS();
+            Clear_AVALIBLE_PRODUCTS();
+            Insert_AVALIBLE_PRODUCTS();
+            FillDataset();
+            FillCombobox();
+        }
+
+        #region Fill dataset and combobox
+        void FillCombobox()
+        {
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+                command.CommandText = $"SELECT NAME FROM AVALIBLE_PRODUCTS WHERE AMOUNT > 0;";
+                SqlDataReader reader;
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    try
+                    {
+                        object name = reader.GetValue(0);
+                        ProductItems.Items.Add(name.ToString());
+                    }
+                    catch { }
+                }
+                cn.Close();
+            }
+        }
+
+        void FillDataset()
+        {
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+
+                DataTable prodTable = new DataTable();
+                SqlDataAdapter adapter = new SqlDataAdapter($"SELECT NAME, AMOUNT FROM AVALIBLE_PRODUCTS WHERE AMOUNT > 0", ConnectionString);
+                adapter.Fill(prodTable);
+                AvalibleProducts.DataContext = prodTable.DefaultView;
+
+                cn.Close();
+            }
+        }
+        #endregion
+
+        #region clear-insert operatinos
+        void Clear_SELECTED_PRODUCTS()
+        {
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+                command.CommandText = $"DELETE FROM SELECTED_PRODUCTS;";
+                command.ExecuteNonQuery();
+                cn.Close();
+            }
+        }
+
+        void Clear_AVALIBLE_PRODUCTS()
+        {
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+                command.CommandText = $"DELETE FROM AVALIBLE_PRODUCTS";
+                command.ExecuteNonQuery();
+                cn.Close();
+            }
+        }
+
+        void Insert_AVALIBLE_PRODUCTS()
+        {
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+                command.CommandText = $"INSERT INTO AVALIBLE_PRODUCTS(ID, NAME, AMOUNT) SELECT ID, NAME, AMOUNT FROM PRODUCTS WHERE KITCHEN_ID = {StartUserWindow.user_id} AND AMOUNT > 0;";
+                command.ExecuteNonQuery();
+                cn.Close();
+            }
+        }
+
+        void ClearAllFields()
+        {
+            RecipeNameBox.Clear();
+            AmountBox.Clear();
+            ProductItems.Text = "";
+            PortionsBox.Clear();
+            DescriptionBox.Clear();
+            Clear_SELECTED_PRODUCTS();
+            Clear_AVALIBLE_PRODUCTS();
+            Insert_AVALIBLE_PRODUCTS();
+            FillDataset();
+
+            SqlDataAdapter adapter = new SqlDataAdapter($"SELECT NAME, AMOUNT FROM SELECTED_PRODUCTS", ConnectionString);
+            DataTable prodTable = new DataTable();
+            adapter.Fill(prodTable);
+            SelectedProducts.DataContext = prodTable.DefaultView;
+        }
+        #endregion
+
+        #region clicks
+        private void AddProductToRecipe_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable prodTable = new DataTable();
+            int amountForCheck = 0;
+            int amount;
+
+            #region data check
+            if (AmountBox.Text.Length == 0)
+            {
+                MessageBox.Show("Please, enter the amount.");
+                return;
+            }
+            else
+            {
+                if (int.TryParse(AmountBox.Text, out amount))
+                { }
+                else
+                {
+                    MessageBox.Show("Incorrect data in amount box.");
+                    return;
+                }
+            }
+            
+            if(amount <= 0)
+            {
+                MessageBox.Show("You entered wrong data");
+                return;
+            }
+
+            if(ProductItems.Text.Length == 0 && AmountBox.Text.Length > 0)
+            {
+                MessageBox.Show("Please, choose an ingredient.");
+                return;
+            }
+            
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+                command.CommandText = $"SELECT AMOUNT FROM AVALIBLE_PRODUCTS WHERE NAME = '{ProductItems.Text}';";
+                amountForCheck = (int)command.ExecuteScalar();
+                cn.Close();
+            }
+            #endregion
+
+            if (amountForCheck < amount)
+            {
+                MessageBox.Show("Entered amount more than avalible amount");
+                return;
+            }
+                
+            else
+            {
+                using (SqlConnection cn = new SqlConnection(ConnectionString))
+                {
+                    cn.Open();
+
+                    SqlCommand command = cn.CreateCommand();
+                    command.CommandText = $"SELECT COUNT(*) FROM SELECTED_PRODUCTS WHERE NAME = '{ProductItems.Text}';";
+                    int count = (int)command.ExecuteScalar();
+                    if(count == 0)
+                    {
+                        //заполнение таблицы SELECTED_PRODUCTS
+                        command.CommandText = $"INSERT INTO SELECTED_PRODUCTS(NAME, AMOUNT) VALUES('{ProductItems.Text}', {amount});";
+                        command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        //update таблицы SELECTED_PRODUCTS
+                        command.CommandText = $"UPDATE SELECTED_PRODUCTS SET AMOUNT = AMOUNT + {amount} WHERE NAME = '{ProductItems.Text}';";
+                        command.ExecuteNonQuery();
+                    }
+
+                    //заполнение selected_products
+                    SqlDataAdapter adapter = new SqlDataAdapter($"SELECT NAME, AMOUNT FROM SELECTED_PRODUCTS", ConnectionString);
+                    adapter.Fill(prodTable);
+                    SelectedProducts.DataContext = prodTable.DefaultView;
+
+                    //запомнить id выбранных item'ов
+                    SqlDataAdapter adapter_id = new SqlDataAdapter($"SELECT ID FROM PRODUCTS WHERE KITCHEN_ID = {StartUserWindow.user_id} AND NAME = '{ProductItems.Text}';", ConnectionString);
+                    DataTable table = new DataTable();
+                    adapter_id.Fill(table);
+                    try
+                    {
+                        foreach (DataRow row in table.Rows)
+                            products_id.Add(Convert.ToInt32(row.ItemArray.First()));
+                    }
+                    catch(Exception a)
+                    {
+                        MessageBox.Show(a.Message);
+                    }
+
+                    //запоминаем amount выбранных продуктов
+                    DataTable _table = new DataTable();
+                    for (int i = 0; i < products_id.Count(); i++)
+                    {
+                        _table.Clear();
+                        SqlDataAdapter adapter_amount = new SqlDataAdapter($"SELECT A.AMOUNT FROM SELECTED_PRODUCTS AS A JOIN PRODUCTS AS B ON A.NAME = B.NAME WHERE B.ID = {products_id.ElementAt(i)};", ConnectionString);
+                        adapter_amount.Fill(_table);
+                    }
+                    foreach (DataRow row in _table.Rows)
+                        amounts.Add(Convert.ToInt32(row.ItemArray.Reverse().Take(1).Single()));
+
+                    //обновляем количество продуктов в AVALIBLE_PRODUCTS
+                    SqlCommand command_1 = cn.CreateCommand();
+                    command_1.CommandText = $"UPDATE AVALIBLE_PRODUCTS SET AMOUNT = AMOUNT - {amount} WHERE NAME = '{ProductItems.Text}';";
+                    command_1.ExecuteNonQuery();
+
+                    cn.Close();
+                }
+
+                FillDataset();
+                ProductItems.Items.Clear();
+                FillCombobox();
+                AmountBox.Clear();
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            #region data check
+            if (RecipeNameBox.Text.Length == 0 || 
+               PortionsBox.Text.Length == 0)
+            {
+                MessageBox.Show("Fill recipe name and portions boxes and continue.");
+                return;
+            }
+
+            string description;
+            if (DescriptionBox.Text.Length == 0)
+                description = "-";
+            else
+                description = DescriptionBox.Text;
+
+            int portions;
+            if (int.TryParse(PortionsBox.Text, out portions))
+            { }
+            else
+            {
+                MessageBox.Show("Invalid data. Check it.");
+                return;
+            }
+
+            if (portions <= 0)
+            {
+                MessageBox.Show("Invalid data. Check it.");
+                return;
+            }
+            #endregion
+
+            using (SqlConnection cn = new SqlConnection(ConnectionString))
+            {
+                cn.Open();
+                SqlCommand command = cn.CreateCommand();
+
+                #region проверка на имя рецепта и кол-во инг.
+                command.CommandText = $"SELECT COUNT(NAME) FROM RECIPES WHERE NAME = '{RecipeNameBox.Text}';";
+                int count = (int)command.ExecuteScalar();
+                if (count > 0)
+                {
+                    MessageBox.Show("Recipe with the same name exist. Change it.");
+                    return;
+                }
+
+                command.CommandText = $"SELECT COUNT(*) FROM SELECTED_PRODUCTS;";
+                int check_product_count = (int)command.ExecuteScalar();
+                if (check_product_count == 0)
+                {
+                    MessageBox.Show("Add at least one ingredient");
+                    return;
+                }
+                #endregion
+
+                //запоминаем имена selected products
+                DataTable _table = new DataTable();
+                SqlDataAdapter adapter_names = new SqlDataAdapter($"SELECT NAME FROM SELECTED_PRODUCTS", ConnectionString);
+                adapter_names.Fill(_table);
+                foreach (DataRow row in _table.Rows)
+                    names.Add(row.ItemArray.First().ToString());
+
+                for (int i = 0; i < names.Count(); i++)
+                {
+                    command.CommandText = $"UPDATE PRODUCTS SET AMOUNT = AMOUNT - (SELECT AMOUNT FROM SELECTED_PRODUCTS WHERE NAME = '{names.ElementAt(i)}') WHERE NAME = '{names.ElementAt(i)}';";
+                    command.ExecuteNonQuery();
+                }   
+
+                command.CommandText = $"INSERT INTO RECIPES(KITCHEN_ID, NAME, PORTIONS, DESCRIPTION) VALUES({StartUserWindow.user_id},'{RecipeNameBox.Text}', {portions}, '{description}');";
+                command.ExecuteNonQuery();
+
+                command.CommandText = $"SELECT ID FROM RECIPES WHERE NAME = '{RecipeNameBox.Text}' AND KITCHEN_ID = {StartUserWindow.user_id};";
+                SqlDataReader reader = command.ExecuteReader();
+                object id = null;
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        id = reader.GetValue(0);
+                    }
+                }
+
+                SqlCommand command_insert = cn.CreateCommand();
+                for (int i = 0; i < products_id.Count(); i++)
+                {
+                    SqlConnection connection = new SqlConnection(ConnectionString);
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand($"INSERT INTO PRODUCTS_RECIPES(RECIPE_ID, PRODUCT_ID, AMOUNT) VALUES({Convert.ToInt32(id)}, {products_id.ElementAt(i)}, {amounts.ElementAt(i)});", connection);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+                cn.Close();
+            }
+
+            MessageBox.Show("Your recipe '" + $"{RecipeNameBox.Text}" + "' added");
+
+            ClearAllFields();
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            StartUserWindow startUserWindow = new StartUserWindow();
+            startUserWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            startUserWindow.Show();
+            Close();
+        }
+        #endregion
+
+    }
+}
